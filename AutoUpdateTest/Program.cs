@@ -1,6 +1,7 @@
 ﻿using System;
 using Starcounter;
 using System.Threading;
+using Starcounter.Internal;
 
 namespace AutoUpdateTest
 {
@@ -52,9 +53,11 @@ namespace AutoUpdateTest
             private readonly UpdateTestJson m_json;
             private readonly TimeSpan m_interval;
             private readonly Timer m_timer;
+            private readonly byte m_schedulerID;
 
             public TimeUpdater(Session session, UpdateTestJson json, TimeSpan interval)
             {
+                m_schedulerID = StarcounterEnvironment.CurrentSchedulerId;
                 m_session = session;
                 m_json = json;
                 m_interval = interval;
@@ -65,7 +68,14 @@ namespace AutoUpdateTest
             {
                 if (m_session.IsAlive())
                 {
-                    m_session.CalculatePatchAndPushOnWebSocket();
+                    Scheduling.ScheduleTask(
+                        m_session.CalculatePatchAndPushOnWebSocket, 
+                        true, m_schedulerID);
+
+                    if (m_session.IsAlive())
+                    {
+                        m_timer.Change(m_interval, Timeout.InfiniteTimeSpan);
+                    }
                 }
                 else
                 {
