@@ -1,0 +1,6 @@
+{
+  "Html": "/AutoUpdateTest/UpdateTestJson.html",
+  "IsAutoUpdate": true,
+  "Time": "",
+  "$Time" : { "Bind" : "_Time" }
+}

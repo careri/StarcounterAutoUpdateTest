@@ -1,0 +1,59 @@
+<!-- 
+  Generates mouse clicks at a defined interval if enabled
+   -->
+<dom-module id="had-auto-update">  
+  <script>
+    Polymer({
+      is: 'had-auto-update',
+      properties: {        
+        // The interval in ms between clicks
+        interval:
+          {
+            notify: true,
+            observer: 'intervalChanged',
+            type: Number
+          },
+        // The real bound date time, in HAD this is received from the server model
+        isEnabled:
+          {
+            notify: true,
+            observer: 'isEnabledChanged',
+            type: Boolean
+          },
+        asyncHandle: { notify: false, type: Object }
+      },
+      attached: function () {
+        console.log("isEnabled: " + this.isEnabled);
+        console.log("interval: " + this.interval);
+      },
+      
+      // The date part changed in the UI
+      intervalChanged: function (value) {
+        this.updateTimer(value, this.isEnabled);
+      },
+      // The date part changed in the UI
+      isEnabledChanged: function (value) {
+        this.updateTimer(this.interval, value);
+      },
+      updateTimer: function (intervalMs, isEnabled) {
+        var handle = this.asyncHandle;
+
+        if (handle) {
+          cancelAsync(handle);
+          handle = null;
+        }
+        if (isEnabled === true && intervalMs > 0) {
+          this.asyncHandle = this.async(this.generateClick, intervalMs);
+        }
+      },
+      generateClick: function () {
+        // QAD to force create a Json Patch and send it to server
+        var forceDirtyChecking = document.createEvent('MouseEvents');
+        forceDirtyChecking.initEvent("mouseup", true, true);
+        window.dispatchEvent(forceDirtyChecking);
+        this.asyncHandle = null;
+        this.updateTimer(this.interval, this.isEnabled);
+      },
+    });
+  </script>
+</dom-module>

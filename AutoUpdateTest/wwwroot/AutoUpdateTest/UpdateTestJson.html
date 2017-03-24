@@ -1,0 +1,12 @@
+﻿<link rel="import" href="/sys/polymer/polymer.html">
+<link rel="import" href="/sys/had-auto-update.html">
+
+<template>
+    <template is="dom-bind">
+        <fieldset>
+            <label>Time:</label>
+            <strong>[[model.Time]]</strong>
+        </fieldset>
+      <had-auto-update interval="1000" is-enabled="[[model.IsAutoUpdate]]"></had-auto-update>
+    </template>
+</template>
