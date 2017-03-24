@@ -7,6 +7,9 @@
             <label>Time:</label>
             <strong>[[model.Time]]</strong>
         </fieldset>
-      <had-auto-update interval="1000" is-enabled="[[model.IsAutoUpdate]]"></had-auto-update>
+      <had-auto-update 
+        interval="1000" 
+        is-enabled="[[model.IsAutoUpdate]]"
+        last-update="{{model.Dummy$}}"></had-auto-update>
     </template>
 </template>

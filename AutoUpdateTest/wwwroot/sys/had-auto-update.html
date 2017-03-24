@@ -20,6 +20,10 @@
             observer: 'isEnabledChanged',
             type: Boolean
           },
+        lastUpdate: {
+          notify: true,
+          type: Number
+        },
         asyncHandle: { notify: false, type: Object }
       },
       attached: function () {
@@ -47,6 +51,11 @@
         }
       },
       generateClick: function () {
+        // set the last update value
+        if (typeof this.lastUpdate !== 'undefined') {
+          this.lastUpdate = Date.now().valueOf();
+        }
+
         // QAD to force create a Json Patch and send it to server
         var forceDirtyChecking = document.createEvent('MouseEvents');
         forceDirtyChecking.initEvent("mouseup", true, true);
